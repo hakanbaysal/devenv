@@ -10,17 +10,6 @@ RUN apt-get update && apt-get install -y openssh-server \
     gnupg-agent \
     software-properties-common \
     golang-go \
-    php7.4 \
-    php7.4-fpm \
-    php7.4-cli \
-    php7.4-gd \
-    php7.4-mysql \
-    php7.4-pgsql \
-    php7.4-sqlite3 \
-    php7.4-curl \
-    php7.4-mbstring \
-    php7.4-xml \
-    php7.4-zip \
     default-jdk \
     nginx \
     nodejs \
@@ -33,13 +22,26 @@ RUN apt-get update && apt-get install -y openssh-server \
     maven \
     nano \
     vim \
-    screen
+    screen \
+    wget
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 RUN export NVM_DIR="$HOME/.nvm"
 RUN . $HOME/.nvm/nvm.sh
 
 RUN apt-get update && apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y && apt-get install ca-certificates curl gnupg lsb-release && mkdir -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && apt-get update && chmod a+r /etc/apt/keyrings/docker.gpg && apt-get update && apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y && apt-get install docker-compose -y && docker --version && docker-compose --version
+
+RUN wget https://github.com/onuragtas/redock/releases/latest/download/redock_Linux_x86_64 -O /usr/local/redock
+RUN chmod +x /usr/local/redock
+RUN echo "/usr/local/redock --devenv" >> /usr/local/bin/redock
+RUN chmod +x /usr/local/bin/redock
+
+RUN echo "docker -H 192.168.36.240:4243 exec -it -w /var/www/html/\$(cat /root/.username)/\$(basename "\$PWD") php74 \$@" >> /usr/local/bin/php74_container && chmod +x /usr/local/bin/php74_container
+RUN echo "docker -H 192.168.36.240:4243 exec -it -w /var/www/html/\$(cat /root/.username)/\$(basename "\$PWD") php72 \$@" >> /usr/local/bin/php72_container && chmod +x /usr/local/bin/php72_container
+RUN echo "docker -H 192.168.36.240:4243 exec -it -w /var/www/html/\$(cat /root/.username)/\$(basename "\$PWD") php56 \$@" >> /usr/local/bin/php56_container && chmod +x /usr/local/bin/php56_container
+RUN echo "docker -H 192.168.36.240:4243 exec -it postgres \$@" >> /usr/local/bin/postgres_container && chmod +x /usr/local/bin/postgres_container
+RUN echo "docker -H 192.168.36.240:4243 exec -it mongo \$@" >> /usr/local/bin/mongo_container && chmod +x /usr/local/bin/mongo_container
+RUN echo "docker -H 192.168.36.240:4243 exec -it db \$@" >> /usr/local/bin/mysql_container && chmod +x /usr/local/bin/mysql_container
 
 ENV PASSWORD=password
 
