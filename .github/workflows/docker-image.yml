@@ -2,9 +2,8 @@ name: Docker Image DEVENV
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    paths:
+      - test/**
 
 jobs:
 
@@ -16,10 +15,6 @@ jobs:
       -
         uses: actions/checkout@v3
         name: Checkout
-        with:
-          filters: |
-            test:
-              - 'test/**'
       -
         name: ls -la
         run: ls -la
