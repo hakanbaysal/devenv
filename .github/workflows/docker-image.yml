@@ -1,0 +1,25 @@
+name: Docker Image DEVENV
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        uses: actions/checkout@v3
+        name: Checkout
+        with:
+          filters: |
+            test:
+              - 'test/**'
+      -
+        name: ls -la
+        run: ls -la
